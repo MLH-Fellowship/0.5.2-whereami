@@ -1,0 +1,185 @@
+.nav-item {
+  border-bottom: 1.5px solid #000;
+  border-radius: 0 !important;
+}
+  
+.nav-item:nth-child(1) {
+  border-color: #a34775;
+}
+
+.nav-item:nth-child(2) {
+  border-color: #d14747;
+}
+
+.nav-item:nth-child(3) {
+  border-color: #194775;
+}
+
+.nav-item:nth-child(4) {
+  border-color: #47a3a3;
+}
+
+.nav-item:nth-child(5) {
+  border-color: #ffd119;
+}
+
+body {
+  padding-left: 10vw;
+  padding-right: 10vw;
+  padding-top: 2vw;
+  font-family: 'Roboto', sans-serif;
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  line-height: 5px;
+  color: #24292e;
+  border-bottom: 1px solid lightgray !important;
+  padding-bottom: 8px;
+  margin-bottom: 0;
+}
+
+h3 {
+  border-top: 1px solid lightgray !important;
+}
+
+p {
+  color: #24292e;
+}
+
+.coursetext {
+  color: #24292e;
+  padding-bottom: 0px!important;
+  margin-bottom: 0px!important;
+}
+
+hr {
+  border-bottom: 1px solid lightgray !important;
+}
+
+nav {
+  margin-bottom: 8px;
+}
+
+.special-link {
+  color: #007bff !important;
+}
+
+a {
+  color:#24292e !important;
+}
+
+a:hover {
+  color: #007bff !important;
+}
+
+#cover-page-outer-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+#cover-page-inner-container {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#cover-page-title {
+  text-align: center;
+  font-size: 24px;
+}
+
+#cover-page-subtitle {
+  text-align: center;
+  font-size: 16px;
+}
+
+#cover-page-disclaimer {
+  text-align: center;
+  font-size: 16px;
+}
+
+.nav-link {
+  font-size: 20px;
+  color: #24292e;
+}
+
+.nav-link:hover {
+  color: #007bff;
+}
+
+.checked {
+  color: orange;
+}
+
+.nav-pills {
+  background-color: transparent !important;
+}
+
+.nav-link.active {
+  color: #007bff !important;
+  background-color: transparent !important;
+}
+
+.specialUL {
+    list-style: none;
+    padding-left: 0;
+}​
+
+strong {
+  display:inline !important;
+}
+
+.please {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 80% !important;
+}
+
+.border2 {
+  stroke: #222;
+  stroke-width: 3mm;
+  stroke-linejoin: miter;
+  stroke-linecap: square;
+  fill-opacity: 0;
+  -webkit-animation: anim1 1.5s linear 1s forwards infinite;
+  animation: anim1 1.5s linear 1s forwards infinite;
+  height: 50vh;
+}
+
+@-webkit-keyframes anim1 {
+  0% {
+    stroke: #222;
+  }
+  50% {
+    stroke: #fff;
+  }
+  100% {
+    stroke: #222;
+  }
+}
+
+@keyframes anim1 {
+  0% {
+    stroke: #222;
+  }
+  50% {
+    stroke: #fff;
+  }
+  100% {
+    stroke: #222;
+  }
+}
+
+.cover2 {
+  position: fixed;
+  display: block;
+  height: 100vh;
+}
