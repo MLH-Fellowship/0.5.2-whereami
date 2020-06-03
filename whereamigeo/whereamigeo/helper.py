@@ -1,6 +1,6 @@
 from functools import reduce
 
-from mappings import map, word_to_plus_code_mapping
+from whereamigeo.mappings import map, word_to_plus_code_mapping
 
 
 sep = '.'

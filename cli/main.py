@@ -1,6 +1,6 @@
-import helper
-
 import typer
+
+from whereamigeo import helper
 
 
 app = typer.Typer()
