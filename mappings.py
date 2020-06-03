@@ -1,25 +1,30 @@
-# arr1 = [2, 3, 4, 5, 6, 7, 8, 9, 'C', 'F', 'G', 'H', 'J', 'M', 'P', 'Q', 'R',
-# 'V', 'W', 'X']
-# arr2 = [2, 3, 4, 5, 6, 7, 8, 9, 'C', 'F', 'G', 'H', 'J', 'M', 'P', 'Q', 'R',
-# 'V', 'W', 'X']
-# arr3 = []
+# plus_codes_list = [2, 3, 4, 5, 6, 7, 8, 9, 'C', 'F', 'G', 'H', 'J', 'M', 'P',
+#                    'Q', 'R', 'V', 'W', 'X']
+# words_list = []
 #
-# my_file = open('../words.txt', 'r')
-# lines = my_file.readlines()
+# words_file = open('../words.txt', 'r')
+# lines = words_file.readlines()
 # for line in lines:
-#     arr3.append("'" + line.strip() + "'")
+#     words_list.append("'" + line.strip() + "'")
 #
 # i = 0
 # j = 0
 # k = 0
 #
-# while i < len(arr1):
-#     while j < len(arr2):
-#         print("'" + str(arr1[i]) + str(arr2[j]) + "'" + ": " + arr3[k] + ',')
+# while i < len(plus_codes_list):
+#     while j < len(plus_codes_list):
+#         print("'" + str(plus_codes_list[i]) + str(plus_codes_list[j]) + "'" +
+#               ": " + words_list[k] + ',')
 #         j += 1
 #         k += 1
 #     i += 1
 #     j = 0
+#
+# m = 0
+# while k < len(words_list) and m < len(plus_codes_list):
+#     print(f"'{plus_codes_list[m]}': {words_list[k]},")
+#     m += 1
+#     k += 1
 
 map = {
     '22': 'find',
@@ -422,6 +427,26 @@ map = {
     'XV': 'sleep',
     'XW': 'prove',
     'XX': 'lone',
+    '2': 'exercise',
+    '3': 'wall',
+    '4': 'catch',
+    '5': 'mount',
+    '6': 'wish',
+    '7': 'board',
+    '8': 'winter',
+    '9': 'written',
+    'C': 'wild',
+    'F': 'instrument',
+    'G': 'kept',
+    'H': 'glass',
+    'J': 'grass',
+    'M': 'edge',
+    'P': 'sign',
+    'Q': 'visit',
+    'R': 'past',
+    'V': 'soft',
+    'W': 'bright',
+    'X': 'weather',
 }
 
 word_to_plus_code_mapping = {v: k for k, v in map.items()}

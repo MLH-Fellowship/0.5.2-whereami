@@ -1,6 +1,6 @@
-import typer
-
 from helper import olc_to_phrase, two_to_word
+
+import typer
 
 
 app = typer.Typer()
