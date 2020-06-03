@@ -423,3 +423,5 @@ map = {
     'XW': 'prove',
     'XX': 'lone',
 }
+
+word_to_plus_code_mapping = {v: k for k, v in map.items()}
