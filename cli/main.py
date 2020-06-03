@@ -1,8 +1,6 @@
-from functools import reduce
-
 import typer
 
-from web.mappings import map
+from helper import olc_to_phrase, two_to_word
 
 
 app = typer.Typer()
@@ -10,21 +8,18 @@ app = typer.Typer()
 
 @app.command()
 def get_word(char_code: str):
-    word = map[char_code]
+    word = two_to_word(char_code)
     typer.echo(f"{word}")
 
 
 @app.command()
 def get_phrase(code: str):
     try:
-        if len(code) < 8:
-            error = typer.style("OLC is too short.", fg=typer.colors.RED)
-            typer.echo(error)
+        if len(code) != 12:
+            error = "Incorrect OLC length. Format: 6PH57VP3+PR6"
+            typer.echo(typer.style(error, fg=typer.colors.RED))
             return
-        # Split string into array of 2 char elements.
-        char_arr = [code[i: i+2] for i in range(0, len(code), 2)]
-        # Convert coded array to word phrase.
-        phrase = reduce(lambda acc, x: acc + "." + map[x], char_arr, "")[1:]
+        phrase = olc_to_phrase(code)
         typer.echo(f"{phrase}")
     except KeyError:
         error = typer.style("Not a valid OLC.", fg=typer.colors.RED)
