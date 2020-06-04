@@ -10,7 +10,7 @@ function initAutocomplete() {
     });
 
     // Create the search box and link it to the UI element.
-    var input = document.getElementById('pac-input');
+    var input = document.getElementById('gmap-input');
     var searchBox = new google.maps.places.SearchBox(input);
 
     // This moves the input box onto the map. Commented out in case we want to use it later.

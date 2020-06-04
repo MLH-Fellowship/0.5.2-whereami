@@ -56,7 +56,7 @@ body {
     font-weight: 300;
 }
 
-#pac-input {
+.pac-input {
     background-color: #fff;
     font-family: 'Abel', sans-serif;
     font-size: 24px;
