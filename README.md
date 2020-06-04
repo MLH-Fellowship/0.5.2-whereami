@@ -7,13 +7,20 @@ You'll need to setup the main `whereamigeo` python package first. Both the web a
 1. Create a virtualenv and initialize it. This may vary depending on your operating system. Setup this virtualenv in the root of the project.
 
        $ virtualenv env && source env/bin/activate
- 
 
-2. `cd` into the `whereamigeo` directory.
+2. Install dependencies for the entire project.
+
+        $ pip install -r requirements.txt
+
+3. Install the pre-commit hooks. This runs linting before every commit.
+        
+        $ pre-commit install
+
+3. `cd` into the `whereamigeo` directory.
 
         $ cd whereamigeo
         
-3. Install the package locally.
+4. Install the package locally.
 
         $ pip install .
 
@@ -25,11 +32,7 @@ Make sure you've completed the general setup before starting this.
 
         $ cd web
 
-2. Install dependencies using `pip`.
-
-        $ pip install -r requirements.txt
-
-3. Run the app with the following:
+2. Run the app with the following:
 
         $ export FLASK_APP=main.py && flask run
 
@@ -43,11 +46,8 @@ Make sure you've completed the general setup before starting this.
 
         $ cd cli
     
-2. Install dependencies using `pip`.
-
-        $ pip install -r requirements.txt
-
-3. For development, run the CLI as a package by using the `-m` flag when executing `python`. You'll first need to `cd` out of the `cli` directory. 
+    
+2. For development, run the CLI as a package by using the `-m` flag when executing `python`. You'll first need to `cd` out of the `cli` directory. 
 
         $ cd ..
         
