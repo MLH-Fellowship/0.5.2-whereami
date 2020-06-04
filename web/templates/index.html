@@ -27,6 +27,7 @@
         <div id="mapdiv" style="height:100%; width:100%; background-color: #E5E5E5;"></div>
         <div id="sidebar" style="height:100%; width:428px; background-color: #E5E5E5; padding: 48px 0px 48px 0px"></div>
     </div>
+    
     <script>
         // Setup variables.
         let color = {
@@ -118,11 +119,43 @@
                 }, 'slow');
             })
 
-        // Setup Google map input.
+        // Setup "where am i?" header.
+        sidebar.append("div")
+            .attr("class", "title")
+            .style("width", width - padding.horizontal * 2)
+            .style("color", color.ink)
+            .style("padding", "48px 0px 64px 0px")
+            .text("where am i?")
+
         sidebar.append("input")
-            .attr("id", "pac-input")
-            .attr("class", "controls")
+            .attr("id", "gmap-input")
+            .attr("class", "controls pac-input")
             .attr("type", "text")
+            .attr("placeholder", "find a location...")
+            .style("border", "none")
+            .style("background-color", color.page)
+            .style("color", color.ink)
+            .style("outline", "none")
+        
+        sidebar.append("div")
+            .style("height", "4px")
+            .style("width", width - padding.horizontal * 2)
+            .style("background-color", color.ink)
+            .style("margin", "4px 24px 24px 24px")
+
+        sidebar.append("div")
+            .style("height", "1px")
+            .style("width", "428px")
+            .style("background-color", color.ink)
+            .style("margin", "24px 0px 24px 0px")
+
+        sidebar.append("form")
+            .attr("id", "olc-form")
+            .append("input")
+            .attr("type", "text")
+            .attr("class", " controls pac-input")
+            .attr("name", "olc")
+            .attr("id", "olc")
             .attr("placeholder", "find a location...")
             .style("border", "none")
             .style("background-color", color.page)
@@ -153,7 +186,6 @@
             .attr("rx", searchBySwitchAttr.width / 2)
             .attr("x", searchBySwitchAttr.x)
             .attr("y", searchBySwitchAttr.y)
-            .style("cursor", "pointer")
             .on("mousedown", function() {
                 toggleSearchBySwitch()
             })
@@ -165,7 +197,6 @@
             .attr("rx", (searchBySwitchAttr.width - searchBySwitchAttr.padding) / 2)
             .attr("x", searchBySwitchAttr.x + searchBySwitchAttr.padding)
             .attr("y", searchBySwitchAttr.y + searchBySwitchAttr.padding)
-            .style("cursor", "pointer")
             .on("mousedown", function() {
                 toggleSearchBySwitch()
             })
@@ -201,8 +232,17 @@
         addSubheader(sidebar, "WORD PHRASE")
         let wordPhraseText = addHeader(sidebar, "")
 
+        function toggleSearchByOpt(searchState) {
+            if (searchState) {
+                document.getElementById("olc").setAttribute("placeholder", `enter a plus code...`)
+            } else {
+                document.getElementById("olc").setAttribute("placeholder", `enter a word phrase...`)
+            }
+        }
+
         function toggleSearchBySwitch() {
             searchByPlusCode = !searchByPlusCode
+            toggleSearchByOpt(searchByPlusCode)
             let circleY = searchByPlusCode ?
                 searchBySwitchAttr.y + searchBySwitchAttr.padding :
                 searchBySwitchAttr.y + searchBySwitchAttr.height - searchBySwitchAttr.padding - searchBySwitchCircle.attr("height")
@@ -223,10 +263,43 @@
             wordPhraseText.text(text)
         }
 
-        updatePlusCode("6PH57VP3+CW7")
-        updateWordPhrase("between.west.north.front.body.board")
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&libraries=places&callback=initAutocomplete " async defer></script>
-</body>
+        // 6PH57VP3+CW7
+        // between.west.north.front.body.board
+        // 849VCWC8+R9
+        // white.horse.body.girl.stead
 
+        const baseUrl = "http://localhost:8000";
+
+        (function() {
+            document.getElementById("olc-form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                console.log("searchByPlusCode current value: " + searchByPlusCode)
+                console.log("User entered: " + document.getElementById("olc").value)
+
+                if (searchByPlusCode) {
+                    fetch(`${baseUrl}/lookup_olc?olc=${document.getElementById("olc").value}`)
+                    .then(res => res.json())
+                    .then(json => {
+                      updatePlusCode(document.getElementById("olc").value)
+                      updateWordPhrase(json.phrase)
+                    })
+                    .catch(err => console.error(err));
+                } else {
+                    fetch(`${baseUrl}/lookup_phrase?phrase=${document.getElementById("olc").value}`)
+                    .then(res => res.json())
+                    .then(json => {
+                      updatePlusCode(json.olc)
+                      updateWordPhrase(document.getElementById("olc").value)
+                    })
+                    .catch(err => console.error(err))
+                }
+            })
+        })();
+
+    </script>
+         
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&libraries=places&callback=initAutocomplete" async defer></script>
+    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+</body>
 </html>
+   
