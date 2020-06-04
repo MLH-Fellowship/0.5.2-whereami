@@ -16,7 +16,7 @@ def get_code(word: str):
 
 def get_olc_array(olc: str, inc: int):
     code = olc.replace('+', '')
-    return [code[i: i+inc] for i in range(0, len(code), inc)]
+    return [code[i: i + inc] for i in range(0, len(code), inc)]
 
 
 def single_char_phrase(olc: str):
