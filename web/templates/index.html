@@ -1,180 +1,171 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    <head>
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-        <meta charset="utf-8">
-        <title>Where Am I?</title>
-        <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
-        <link rel ="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-      
-        <style>
-            #map {
-              height: 100%;
-            }
 
-            html, body {
-              height: 100%;
-              margin: 0;
-              padding: 0;
-            }
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Where Am I?</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/googlemap.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/googlemap.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/sidebar.js') }}"></script>
+</head>
 
-            #description {
-              font-family: Roboto;
-              font-size: 15px;
-              font-weight: 300;
-            }
-      
-            #infowindow-content .title {
-              font-weight: bold;
-            }
-      
-            #infowindow-content {
-              display: none;
-            }
-      
-            #map #infowindow-content {
-              display: inline;
-            }
-      
-            .pac-card {
-              margin: 10px 10px 0 0;
-              border-radius: 2px 0 0 2px;
-              box-sizing: border-box;
-              -moz-box-sizing: border-box;
-              outline: none;
-              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-              background-color: #fff;
-              font-family: Roboto;
-            }
-      
-            #pac-container {
-              padding-bottom: 12px;
-              margin-right: 12px;
-            }
-      
-            .pac-controls {
-              display: inline-block;
-              padding: 5px 11px;
-            }
-      
-            .pac-controls label {
-              font-family: Roboto;
-              font-size: 13px;
-              font-weight: 300;
-            }
-      
-            #pac-input {
-              background-color: #fff;
-              font-family: Roboto;
-              font-size: 15px;
-              font-weight: 300;
-              margin-left: 12px;
-              padding: 0 11px 0 13px;
-              text-overflow: ellipsis;
-              width: 400px;
-            }
-      
-            #pac-input:focus {
-              border-color: #4d90fe;
-            }
-      
-            #title {
-              color: #fff;
-              background-color: #4d90fe;
-              font-size: 25px;
-              font-weight: 500;
-              padding: 6px 12px;
-            }
-
-            #target {
-              width: 345px;
-            }
-        </style>
-    </head>
-
-    <body>
-        <h1>Where Am I?</h1>
-
-        <!-- RENDER MAP HERE -->
-
-        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-        <div id="map"></div>
-
-        <script>
-        function initAutocomplete() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -33.8688, lng: 151.2195},
-            zoom: 13,
-            mapTypeId: 'roadmap'
-            });
-    
-            // Create the search box and link it to the UI element.
-            var input = document.getElementById('pac-input');
-            var searchBox = new google.maps.places.SearchBox(input);
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    
-            // Bias the SearchBox results towards current map's viewport.
-            map.addListener('bounds_changed', function() {
-            searchBox.setBounds(map.getBounds());
-            });
-    
-            var markers = [];
-            // Listen for the event fired when the user selects a prediction and retrieve
-            // more details for that place.
-            searchBox.addListener('places_changed', function() {
-            var places = searchBox.getPlaces();
-    
-            if (places.length == 0) {
-                return;
-            }
-    
-            // Clear out the old markers.
-            markers.forEach(function(marker) {
-                marker.setMap(null);
-            });
-            markers = [];
-    
-            // For each place, get the icon, name and location.
-            var bounds = new google.maps.LatLngBounds();
-            places.forEach(function(place) {
-                if (!place.geometry) {
-                console.log("Returned place contains no geometry");
-                return;
-                }
-                var icon = {
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(25, 25)
-                };
-    
-                // Create a marker for each place.
-                markers.push(new google.maps.Marker({
-                map: map,
-                icon: icon,
-                title: place.name,
-                position: place.geometry.location
-                }));
-    
-                if (place.geometry.viewport) {
-                // Only geocodes have viewport.
-                bounds.union(place.geometry.viewport);
-                } else {
-                bounds.extend(place.geometry.location);
-                }
-            });
-            map.fitBounds(bounds);
-            });
+<body>
+    <div style="align-items: center; display: flex; justify-content: center; height:100%; width:100%">
+        <div id="mapdiv" style="height:100%; width:100%; background-color: #E5E5E5;"></div>
+        <div id="sidebar" style="height:100%; width:428px; background-color: #E5E5E5;"></div>
+    </div>
+    <script>
+        // Setup variables.
+        let color = {
+            page: "#E5E5E5",
+            subdued: "#5F7679",
+            ink: "#324749"
         }
-        </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete" async defer></script>
-    </body>
+
+        let padding = {
+            horizontal: 24,
+            vertical: 48
+        }
+
+        let searchBySwitchAttr = {
+            width: 27,
+            height: 68,
+            padding: 4,
+            x: 2,
+            y: 2
+        }
+
+        let sidebar = d3.select("div#sidebar")
+        let height = sidebar.attr("height")
+        let width = sidebar.attr("width")
+        let searchByPlusCode = false
+
+        // Setup "where am i?" header.
+        sidebar.append("div")
+            .attr("class", "title")
+            .style("width", width - padding.horizontal * 2)
+            .style("color", color.ink)
+            .style("padding", "48px 0px 64px 0px")
+            .text("where am i?")
+
+        // Setup Google map input.
+        sidebar.append("input")
+            .attr("id", "pac-input")
+            .attr("class", "controls")
+            .attr("type", "text")
+            .attr("placeholder", "find a location...")
+            .style("border", "none")
+            .style("background-color", color.page)
+            .style("color", color.ink)
+            .style("outline", "none")
+
+        sidebar.append("div")
+            .style("height", "4px")
+            .style("width", width - padding.horizontal * 2)
+            .style("background-color", color.ink)
+            .style("margin", "4px 24px 24px 24px")
+
+        // Setup "search by" section.
+        addSubheader(sidebar, "SEARCH BY")
+
+        let searchBySvg = sidebar.append("div")
+            .style("padding", "0px 24px 0px 24px")
+            .append("svg")
+            .attr("height", searchBySwitchAttr.height + 4)
+            .attr("width", 210)
+
+        searchBySvg.append("rect")
+            .attr("stroke", color.ink)
+            .attr("stroke-width", 2)
+            .attr("fill", color.page)
+            .attr("height", searchBySwitchAttr.height)
+            .attr("width", searchBySwitchAttr.width)
+            .attr("rx", searchBySwitchAttr.width / 2)
+            .attr("x", searchBySwitchAttr.x)
+            .attr("y", searchBySwitchAttr.y)
+            .on("mousedown", function() {
+                toggleSearchBySwitch()
+            })
+
+        let searchBySwitchCircle = searchBySvg.append("rect")
+            .attr("fill", color.ink)
+            .attr("width", searchBySwitchAttr.width - searchBySwitchAttr.padding * 2)
+            .attr("height", searchBySwitchAttr.width - searchBySwitchAttr.padding * 2)
+            .attr("rx", (searchBySwitchAttr.width - searchBySwitchAttr.padding) / 2)
+            .attr("x", searchBySwitchAttr.x + searchBySwitchAttr.padding)
+            .attr("y", searchBySwitchAttr.y + searchBySwitchAttr.padding)
+            .on("mousedown", function() {
+                toggleSearchBySwitch()
+            })
+
+        let searchByPlusCodeText = searchBySvg.append("text")
+            .attr("class", "caption")
+            .attr("fill", color.ink)
+            .attr("x", searchBySwitchAttr.x + searchBySwitchAttr.width + 18)
+            .attr("y", searchBySwitchAttr.y + searchBySwitchAttr.padding)
+            .attr("alignment-baseline", "hanging")
+            .text("plus code")
+
+        let searchByWordPhraseText = searchBySvg.append("text")
+            .attr("class", "caption")
+            .attr("fill", color.ink)
+            .attr("x", searchBySwitchAttr.x + searchBySwitchAttr.width + 18)
+            .attr("y", searchBySwitchAttr.y + searchBySwitchAttr.height - searchBySwitchAttr.padding)
+            .attr("alignment-baseline", "bottom")
+            .text("word phrase")
+
+        toggleSearchBySwitch()
+
+        // Add divider.
+        sidebar.append("div")
+            .style("height", "1px")
+            .style("width", "428px")
+            .style("background-color", color.ink)
+            .style("margin", "24px 0px 24px 0px")
+
+        // Setup plus code and word phrase information section.
+        addSubheader(sidebar, "PLUS CODE")
+        let plusCodeText = addHeader(sidebar, "")
+        addSubheader(sidebar, "WORD PHRASE")
+        let wordPhraseText = addHeader(sidebar, "")
+
+        function toggleSearchBySwitch() {
+            searchByPlusCode = !searchByPlusCode
+            let circleY = searchByPlusCode ?
+                searchBySwitchAttr.y + searchBySwitchAttr.padding :
+                searchBySwitchAttr.y + searchBySwitchAttr.height - searchBySwitchAttr.padding - searchBySwitchCircle.attr("height")
+            searchBySwitchCircle.transition()
+                .duration(100)
+                .ease(d3.easeLinear)
+                .attr("x", searchBySwitchAttr.x + searchBySwitchAttr.padding)
+                .attr("y", circleY)
+            searchByPlusCodeText.attr("opacity", searchByPlusCode ? 1 : 0.25)
+            searchByWordPhraseText.attr("opacity", searchByPlusCode ? 0.25 : 1)
+        }
+
+        function updatePlusCode(text) {
+            plusCodeText.text(text)
+        }
+
+        function updateWordPhrase(text) {
+            wordPhraseText.text(text)
+        }
+
+        updatePlusCode("6PH57VP3+CW7")
+        updateWordPhrase("between.west.north.front.body.board")
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&libraries=places&callback=initAutocomplete " async defer></script>
+</body>
+
 </html>
