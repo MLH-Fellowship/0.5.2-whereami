@@ -1,6 +1,6 @@
 function initAutocomplete() {
     let mapDiv = document.getElementById('mapdiv');
-    var map = new google.maps.Map(mapDiv, {
+    map = new google.maps.Map(mapDiv, {
         center: {
             lat: -33.8688,
             lng: 151.2195
@@ -40,10 +40,12 @@ function initAutocomplete() {
         // For each place, get the icon, name and location.
         var bounds = new google.maps.LatLngBounds();
         places.forEach(function(place) {
+            console.log(place);
             if (!place.geometry) {
                 console.log("Returned place contains no geometry ");
                 return;
             }
+            callPlusCodesApi(place.geometry.location)
             var icon = {
                 url: place.icon,
                 size: new google.maps.Size(71, 71),
@@ -55,7 +57,6 @@ function initAutocomplete() {
             // Create a marker for each place.
             markers.push(new google.maps.Marker({
                 map: map,
-                icon: icon,
                 title: place.name,
                 position: place.geometry.location
             }));
@@ -69,4 +70,21 @@ function initAutocomplete() {
         });
         map.fitBounds(bounds);
     });
+}
+
+function callPlusCodesApi(bounds) {
+    // TODO: THIS IS BASICALLY CALLBACK HELL BUT W/ PROMISES
+    fetch(`https://plus.codes/api?address=${bounds.lat()},${bounds.lng()}&ekey=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&language=en`)
+    .then(res => res.json())
+    .then(json => {
+        let plus_code = json.plus_code.global_code;
+        updatePlusCode(plus_code);
+        // TODO: extract into function
+        fetch(`${baseUrl}/lookup_olc?olc=${plus_code}`)
+        .then(res => res.json())
+        .then(json => {
+          updateWordPhrase(json.phrase)
+        })
+    })
+        .catch(err => console.error(err));
 }

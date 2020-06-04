@@ -16,7 +16,6 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='js/googlemap.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/sidebar.js') }}"></script>
 </head>
 
@@ -282,6 +281,7 @@
                     .then(json => {
                       updatePlusCode(document.getElementById("olc").value)
                       updateWordPhrase(json.phrase)
+                        // Replicate it here
                     })
                     .catch(err => console.error(err));
                 } else {
@@ -290,6 +290,25 @@
                     .then(json => {
                       updatePlusCode(json.olc)
                       updateWordPhrase(document.getElementById("olc").value)
+                        fetch(`https://plus.codes/api?address=${json.olc.replace('+', '%2B')}&ekey=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&language=en`)
+                        .then(json => json.json())
+                        .then(json => {
+                            var icon = {
+                                size: new google.maps.Size(71, 71),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(17, 34),
+                                scaledSize: new google.maps.Size(25, 25)
+                            };
+
+                            // Create a marker for each place.
+                            new google.maps.Marker({
+                                map: map,
+                                icon: icon,
+                                title: "poo palace",
+                                position: json.plus_code.geometry.location
+                            });
+                            map.panTo(json.plus_code.geometry.location)
+                        })
                     })
                     .catch(err => console.error(err))
                 }
@@ -299,6 +318,7 @@
     </script>
          
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&libraries=places&callback=initAutocomplete" async defer></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/googlemap.js') }}"></script>
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
 </body>
 </html>
