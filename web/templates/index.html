@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -20,10 +20,12 @@
     <script type="text/javascript" src="{{ url_for('static',filename='js/sidebar.js') }}"></script>
 </head>
 
-<body>
-    <div style="align-items: center; display: flex; justify-content: center; height:100%; width:100%">
+<body style="background-color: #E5E5E5;">
+    <div id="landing" style="height:100%; width: 100%; background-color: #E5E5E5; padding: 0px 10% 0px 10%; align-items: center; display: flex; justify-content: center;"></div>
+    <div style="height:1px; width: 100%; background-color: #5F7679;"></div>
+    <div id="whereamidiv" style="align-items: center; display: flex; justify-content: center; height:100%; width:100%">
         <div id="mapdiv" style="height:100%; width:100%; background-color: #E5E5E5;"></div>
-        <div id="sidebar" style="height:100%; width:428px; background-color: #E5E5E5;"></div>
+        <div id="sidebar" style="height:100%; width:428px; background-color: #E5E5E5; padding: 48px 0px 48px 0px"></div>
     </div>
     <script>
         // Setup variables.
@@ -46,18 +48,75 @@
             y: 2
         }
 
+        let landing = d3.select("div#landing").append("div")
         let sidebar = d3.select("div#sidebar")
         let height = sidebar.attr("height")
         let width = sidebar.attr("width")
         let searchByPlusCode = false
 
-        // Setup "where am i?" header.
-        sidebar.append("div")
+        // Setup landing image.
+        let imageAttr = {
+            width: 76,
+            height: 140
+        }
+
+        let imageSvg = landing.append("div")
+            .style("display", "flex")
+            .style("align-items", "center")
+            .style("justify-content", "center")
+            .style("padding-bottom", "24px")
+            .style("width", "100%")
+            .style("height", imageAttr.height)
+            .append("svg")
+            .attr("width", imageAttr.width)
+            .attr("height", imageAttr.height)
+
+        imageSvg.append("image")
+            .attr('xlink:href', "{{ url_for('static',filename='images/whereami.svg') }}")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", imageAttr.width)
+            .attr("height", imageAttr.height)
+
+        landing.append("div")
             .attr("class", "title")
-            .style("width", width - padding.horizontal * 2)
             .style("color", color.ink)
-            .style("padding", "48px 0px 64px 0px")
             .text("where am i?")
+
+        // let introHTML = `
+        //   Translate your <a href="https://en.wikipedia.org/wiki/Open_Location_Code" style="color: #324749;"> 
+        //   open location code (OLC) </a> to a word phrase that can be easily remembered.
+        // `
+
+        let introHTML = "Translate your location to a word phrase that can be easily remembered."
+
+        landing.append("div")
+            .attr("class", "subheader")
+            .style("color", color.subdued)
+            .style("width", 100)
+            .style("word-wrap", "normal")
+            .style("text-align", "center")
+            .style("padding", "24px 0px 24px 0px")
+            .html(introHTML)
+
+        let landingButton = landing.append("div")
+            .attr("class", "subheader")
+            .style("text-align", "right")
+            .append("a")
+            .style("color", color.ink)
+            .style("text-decoration", "none")
+            .style("transition", ".3s ease")
+            .style("cursor", "pointer")
+            .text("FIND WHERE YOU ARE >>")
+            .on("mouseover", function() {
+                landingButton.style("letter-spacing", "2px")
+            }).on("mouseout", function() {
+                landingButton.style("letter-spacing", "0px")
+            }).on("mousedown", function() {
+                $('html,body').animate({
+                    scrollTop: $("#whereamidiv").offset().top
+                }, 'slow');
+            })
 
         // Setup Google map input.
         sidebar.append("input")
@@ -94,6 +153,7 @@
             .attr("rx", searchBySwitchAttr.width / 2)
             .attr("x", searchBySwitchAttr.x)
             .attr("y", searchBySwitchAttr.y)
+            .style("cursor", "pointer")
             .on("mousedown", function() {
                 toggleSearchBySwitch()
             })
@@ -105,6 +165,7 @@
             .attr("rx", (searchBySwitchAttr.width - searchBySwitchAttr.padding) / 2)
             .attr("x", searchBySwitchAttr.x + searchBySwitchAttr.padding)
             .attr("y", searchBySwitchAttr.y + searchBySwitchAttr.padding)
+            .style("cursor", "pointer")
             .on("mousedown", function() {
                 toggleSearchBySwitch()
             })
