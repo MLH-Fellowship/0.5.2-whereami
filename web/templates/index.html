@@ -7,7 +7,7 @@
     <title>Where Am I?</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/googlemap.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/whereami.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
@@ -314,7 +314,7 @@
                     fetch(`${baseUrl}/lookup_olc?olc=${document.getElementById("olc").value}`)
                         .then(res => res.json())
                         .then(json => {
-                            if(json.status == 400) {
+                            if (json.status == 400) {
                                 throw "Uh oh!";
                             }
                             updatePlusCode(document.getElementById("olc").value)
@@ -352,7 +352,7 @@
                         .then(res => res.json())
                         .then(json => {
                             console.log("json", json);
-                            if(json.status == 400) {
+                            if (json.status == 400) {
                                 throw "Uh oh!";
                             }
                             updatePlusCode(json.olc)
