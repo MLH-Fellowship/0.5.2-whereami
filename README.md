@@ -1,10 +1,11 @@
+![](logo.png)
 ![](whereami.gif)
 
 # Where Am I?
 
-## Development Environment Setup
+## Installation
 
-### General Setup
+### General Setup (1/4)
 You'll need to setup the main `whereamigeo` python package first. Both the web and cli depend on it.
 1. Create a virtualenv and initialize it. This may vary depending on your operating system. Setup this virtualenv in the root of the project.
 
@@ -27,7 +28,7 @@ You'll need to setup the main `whereamigeo` python package first. Both the web a
         $ pip install .
 
 
-### Web
+### Web (2/4)
 Make sure you've completed the general setup before starting this.
 
 1. `cd` into the `web` directory. This is where the files for the web app live.
@@ -41,7 +42,7 @@ Make sure you've completed the general setup before starting this.
 This should start Flask. You can then view the website at localhost:5000.
 
 
-### CLI
+### CLI (3/4)
 Make sure you've completed the general setup before starting this.
 
 1. `cd` into the `cli` directory. This is where the files for the CLI live.
@@ -57,7 +58,7 @@ Make sure you've completed the general setup before starting this.
     
         $ python -m cli.main <args>
 
-### Whereamigeo Package
+### whereamigeo (4/4)
 If you've done the general setup, then this should be setup properly. 
 
 Keep in mind, every time you make a change to the files under `whereamigeo/`, you'll need to reinstall the package for the changes to take place.
