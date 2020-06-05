@@ -53,7 +53,7 @@
         let sidebar = d3.select("div#sidebar")
         let height = sidebar.attr("height")
         let width = sidebar.attr("width")
-        let searchByPlusCode = false
+        let searchByPlusCode = true
 
         // Setup landing image.
         let imageAttr = {
@@ -319,8 +319,27 @@
                             }
                             updatePlusCode(document.getElementById("olc").value)
                             updateWordPhrase(json.phrase)
+                        
+                      fetch(`https://plus.codes/api?address=${json.olc.replace('+', '%2B')}&ekey=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&language=en`)
+                        .then(json => json.json())
+                        .then(json => {
+                            var icon = {
+                                size: new google.maps.Size(71, 71),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(17, 34),
+                                scaledSize: new google.maps.Size(25, 25)
+                            };
+
+                            new google.maps.Marker({
+                                map: map,
+                                icon: icon,
+                                position: json.plus_code.geometry.location
+                            });
+                            map.panTo(json.plus_code.geometry.location)
+                            map.setZoom(18)
                         })
-                        .catch(err => {
+                    })
+                    .catch(err => {
                             updatePlusCode("--")
                             updateWordPhrase("--")
                             errorMessageSvg.attr("height", "48px")
@@ -338,6 +357,24 @@
                             }
                             updatePlusCode(json.olc)
                             updateWordPhrase(document.getElementById("olc").value)
+                    fetch(`https://plus.codes/api?address=${json.olc.replace('+', '%2B')}&ekey=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&language=en`)
+                        .then(json => json.json())
+                        .then(json => {
+                            var icon = {
+                                size: new google.maps.Size(71, 71),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(17, 34),
+                                scaledSize: new google.maps.Size(25, 25)
+                            };
+
+                            new google.maps.Marker({
+                                map: map,
+                                icon: icon,
+                                position: json.plus_code.geometry.location
+                            });
+                            map.panTo(json.plus_code.geometry.location)
+                            map.setZoom(18)
+                        })
                         })
                         .catch(err => {
                             updatePlusCode("--")

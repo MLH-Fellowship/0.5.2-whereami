@@ -1,3 +1,5 @@
+![](whereami.gif)
+
 # Where Am I?
 
 ## Development Environment Setup

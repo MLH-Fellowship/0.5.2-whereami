@@ -2,8 +2,8 @@ function initAutocomplete() {
     let mapDiv = document.getElementById('mapdiv');
     map = new google.maps.Map(mapDiv, {
         center: {
-            lat: -33.8688,
-            lng: 151.2195
+            lat: 49.2827,
+            lng: -123.1207
         },
         zoom: 13,
         mapTypeId: 'roadmap'
