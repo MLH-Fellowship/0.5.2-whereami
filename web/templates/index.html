@@ -16,6 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/googlemap.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/sidebar.js') }}"></script>
 </head>
 
@@ -118,13 +119,7 @@
                 }, 'slow');
             })
 
-        // Setup "where am i?" header.
-        sidebar.append("div")
-            .attr("class", "title")
-            .style("width", width - padding.horizontal * 2)
-            .style("color", color.ink)
-            .style("padding", "48px 0px 64px 0px")
-            .text("where am i?")
+        addSubheader(sidebar, "ADDRESS")
 
         sidebar.append("input")
             .attr("id", "gmap-input")
@@ -135,18 +130,21 @@
             .style("background-color", color.page)
             .style("color", color.ink)
             .style("outline", "none")
-        
+
         sidebar.append("div")
             .style("height", "4px")
             .style("width", width - padding.horizontal * 2)
             .style("background-color", color.ink)
-            .style("margin", "4px 24px 24px 24px")
+            .style("margin", "4px 24px 48px 24px")
 
-        sidebar.append("div")
-            .style("height", "1px")
-            .style("width", "428px")
-            .style("background-color", color.ink)
-            .style("margin", "24px 0px 24px 0px")
+        // Setup "search by" section.
+        addSubheader(sidebar, "SEARCH BY")
+
+        let searchBySvg = sidebar.append("div")
+            .style("padding", "0px 24px 0px 24px")
+            .append("svg")
+            .attr("height", searchBySwitchAttr.height + 4)
+            .attr("width", 210)
 
         sidebar.append("form")
             .attr("id", "olc-form")
@@ -160,21 +158,13 @@
             .style("background-color", color.page)
             .style("color", color.ink)
             .style("outline", "none")
+            .style("margin-top", "24px")
 
         sidebar.append("div")
             .style("height", "4px")
             .style("width", width - padding.horizontal * 2)
             .style("background-color", color.ink)
             .style("margin", "4px 24px 24px 24px")
-
-        // Setup "search by" section.
-        addSubheader(sidebar, "SEARCH BY")
-
-        let searchBySvg = sidebar.append("div")
-            .style("padding", "0px 24px 0px 24px")
-            .append("svg")
-            .attr("height", searchBySwitchAttr.height + 4)
-            .attr("width", 210)
 
         searchBySvg.append("rect")
             .attr("stroke", color.ink)
@@ -222,8 +212,8 @@
         sidebar.append("div")
             .style("height", "1px")
             .style("width", "428px")
-            .style("background-color", color.ink)
-            .style("margin", "24px 0px 24px 0px")
+            .style("background-color", color.subdued)
+            .style("margin", "48px 0px 24px 0px")
 
         // Setup plus code and word phrase information section.
         addSubheader(sidebar, "PLUS CODE")
@@ -277,49 +267,27 @@
 
                 if (searchByPlusCode) {
                     fetch(`${baseUrl}/lookup_olc?olc=${document.getElementById("olc").value}`)
-                    .then(res => res.json())
-                    .then(json => {
-                      updatePlusCode(document.getElementById("olc").value)
-                      updateWordPhrase(json.phrase)
-                        // Replicate it here
-                    })
-                    .catch(err => console.error(err));
+                        .then(res => res.json())
+                        .then(json => {
+                            updatePlusCode(document.getElementById("olc").value)
+                            updateWordPhrase(json.phrase)
+                        })
+                        .catch(err => console.error(err));
                 } else {
                     fetch(`${baseUrl}/lookup_phrase?phrase=${document.getElementById("olc").value}`)
-                    .then(res => res.json())
-                    .then(json => {
-                      updatePlusCode(json.olc)
-                      updateWordPhrase(document.getElementById("olc").value)
-                        fetch(`https://plus.codes/api?address=${json.olc.replace('+', '%2B')}&ekey=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&language=en`)
-                        .then(json => json.json())
+                        .then(res => res.json())
                         .then(json => {
-                            var icon = {
-                                size: new google.maps.Size(71, 71),
-                                origin: new google.maps.Point(0, 0),
-                                anchor: new google.maps.Point(17, 34),
-                                scaledSize: new google.maps.Size(25, 25)
-                            };
-
-                            // Create a marker for each place.
-                            new google.maps.Marker({
-                                map: map,
-                                icon: icon,
-                                title: "poo palace",
-                                position: json.plus_code.geometry.location
-                            });
-                            map.panTo(json.plus_code.geometry.location)
+                            updatePlusCode(json.olc)
+                            updateWordPhrase(document.getElementById("olc").value)
                         })
-                    })
-                    .catch(err => console.error(err))
+                        .catch(err => console.error(err))
                 }
             })
         })();
-
     </script>
-         
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&libraries=places&callback=initAutocomplete" async defer></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='js/googlemap.js') }}"></script>
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
 </body>
+
 </html>
-   
