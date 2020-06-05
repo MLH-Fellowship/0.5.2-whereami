@@ -87,4 +87,3 @@ function callPlusCodesApi(bounds) {
         })
     })
         .catch(err => console.error(err));
-}
