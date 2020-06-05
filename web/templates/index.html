@@ -25,7 +25,7 @@
     <div style="height:1px; width: 100%; background-color: #5F7679;"></div>
     <div id="whereamidiv" style="align-items: center; display: flex; justify-content: center; height:100%; width:100%">
         <div id="mapdiv" style="height:100%; width:100%; background-color: #E5E5E5;"></div>
-        <div id="sidebar" style="height:100%; width:428px; background-color: #E5E5E5; padding: 48px 0px 48px 0px"></div>
+        <div id="sidebar" style="height:100%; width:428px; background-color: #E5E5E5; padding: 0px 0px 48px 0px"></div>
     </div>
 
     <script>
@@ -119,6 +119,49 @@
                 }, 'slow');
             })
 
+        let errorMessageSvg = sidebar.append("div")
+            .style("margin", "0px 0px 48px 0px")
+            .append("svg")
+            .attr("height", "48px")
+            .attr("width", "428px")
+
+        let errorMessage = errorMessageSvg.append("text")
+            .attr("class", "subheader")
+            .attr("fill", color.ink)
+            .attr("x", 428 / 2)
+            .attr("y", 48 / 2)
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "middle")
+            .text("Error occurred.")
+
+        errorMessageSvg.append("text")
+            .attr("class", "subheader")
+            .attr("fill", color.ink)
+            .attr("x", 428 - padding.horizontal)
+            .attr("y", 48 / 2)
+            .attr("text-anchor", "end")
+            .attr("alignment-baseline", "middle")
+            .style("cursor", "pointer")
+            .text("X")
+            .on("mousedown", function() {
+                errorMessageSvg.transition()
+                    .duration(100)
+                    .ease(d3.easeLinear)
+                    .attr("height", "0px")
+                    .attr("visibility", "hidden")
+            })
+
+        errorMessageSvg.append("line")
+            .attr("x1", 0)
+            .attr("x2", 428)
+            .attr("y1", 48)
+            .attr("y2", 48)
+            .attr("stroke", color.ink)
+            .attr("stroke-width", 1)
+
+        errorMessageSvg.attr("height", "0px")
+            .attr("visibility", "hidden")
+
         addSubheader(sidebar, "ADDRESS")
 
         sidebar.append("input")
@@ -175,6 +218,7 @@
             .attr("rx", searchBySwitchAttr.width / 2)
             .attr("x", searchBySwitchAttr.x)
             .attr("y", searchBySwitchAttr.y)
+            .style("cursor", "pointer")
             .on("mousedown", function() {
                 toggleSearchBySwitch()
             })
@@ -186,6 +230,7 @@
             .attr("rx", (searchBySwitchAttr.width - searchBySwitchAttr.padding) / 2)
             .attr("x", searchBySwitchAttr.x + searchBySwitchAttr.padding)
             .attr("y", searchBySwitchAttr.y + searchBySwitchAttr.padding)
+            .style("cursor", "pointer")
             .on("mousedown", function() {
                 toggleSearchBySwitch()
             })
@@ -217,9 +262,9 @@
 
         // Setup plus code and word phrase information section.
         addSubheader(sidebar, "PLUS CODE")
-        let plusCodeText = addHeader(sidebar, "")
+        let plusCodeText = addHeader(sidebar, "--")
         addSubheader(sidebar, "WORD PHRASE")
-        let wordPhraseText = addHeader(sidebar, "")
+        let wordPhraseText = addHeader(sidebar, "--")
 
         function toggleSearchByOpt(searchState) {
             if (searchState) {
@@ -269,18 +314,39 @@
                     fetch(`${baseUrl}/lookup_olc?olc=${document.getElementById("olc").value}`)
                         .then(res => res.json())
                         .then(json => {
+                            if(json.status == 400) {
+                                throw "Uh oh!";
+                            }
                             updatePlusCode(document.getElementById("olc").value)
                             updateWordPhrase(json.phrase)
                         })
-                        .catch(err => console.error(err));
+                        .catch(err => {
+                            updatePlusCode("--")
+                            updateWordPhrase("--")
+                            errorMessageSvg.attr("height", "48px")
+                                .attr("visibility", "visible")
+                            errorMessage.text("Invalid plus code.")
+                            console.error(err)
+                        });
                 } else {
                     fetch(`${baseUrl}/lookup_phrase?phrase=${document.getElementById("olc").value}`)
                         .then(res => res.json())
                         .then(json => {
+                            console.log("json", json);
+                            if(json.status == 400) {
+                                throw "Uh oh!";
+                            }
                             updatePlusCode(json.olc)
                             updateWordPhrase(document.getElementById("olc").value)
                         })
-                        .catch(err => console.error(err))
+                        .catch(err => {
+                            updatePlusCode("--")
+                            updateWordPhrase("--")
+                            errorMessageSvg.attr("height", "48px")
+                                .attr("visibility", "visible")
+                            errorMessage.text("Invalid word phrase.")
+                            console.error(err)
+                        })
                 }
             })
         })();
