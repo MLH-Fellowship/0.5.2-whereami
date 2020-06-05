@@ -76,3 +76,8 @@ Not much setup is needed for the Discord functionality to work - as long as you 
 1. On line 27, replace the `INSERT-TOKEN-HERE` with your Discord token. Run the command and it'll start up!
 
         $ python bot.py
+
+## Contributors
+[Kai Chen](https://github.com/kx-chen)  
+[Yanlam Ko](https://github.com/YKo20010)  
+[Christopher Nguyen](https://github.com/chrisngyn)
