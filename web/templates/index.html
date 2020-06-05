@@ -302,7 +302,7 @@
         // 849VCWC8+R9
         // white.horse.body.girl.stead
 
-        const baseUrl = "http://localhost:8000";
+        const baseUrl = "https://whereami052-backend.herokuapp.com";
 
         (function() {
             document.getElementById("olc-form").addEventListener("submit", (e) => {
@@ -349,12 +349,7 @@
                         });
                 } else {
                     fetch(`${baseUrl}/lookup_phrase?phrase=${document.getElementById("olc").value}`)
-                    .then(res => res.json())
-                    .then(json => {
-                      updatePlusCode(json.olc)
-                      updateWordPhrase(document.getElementById("olc").value)
-                        fetch(`https://plus.codes/api?address=${json.olc.replace('+', '%2B')}&ekey=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&language=en`)
-                        .then(json => json.json())
+                        .then(res => res.json())
                         .then(json => {
                             console.log("json", json);
                             if (json.status == 400) {

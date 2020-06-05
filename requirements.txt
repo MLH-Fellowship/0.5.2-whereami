@@ -3,3 +3,4 @@ uvicorn
 flask
 typer
 pre-commit
+gunicorn
